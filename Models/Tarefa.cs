@@ -1,12 +1,17 @@
-﻿namespace ListaTarefa.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ListaTarefa.API.Models
 {
     public class Tarefa
     {
         public int Id { get; set; }
-        public string Titulo { get; set; }
-        public string Descricao { get; set; }
+        [Required(ErrorMessage = "O Titulo é obrigatório.")]
+        public string Titulo { get; set; } = string.Empty;
+        [Required(ErrorMessage = "A descrição é obrigatória.")]
+        public string Descricao { get; set; } = string.Empty;
+        [Required(ErrorMessage = "O status é obrigatório.")]
         public bool Status { get; set; }
-        public DateTime dataCriacao { get; set; } = DateTime.Now;
+        public DateTime DataCriacao { get; set; } = DateTime.Now;
 
     }
 }
