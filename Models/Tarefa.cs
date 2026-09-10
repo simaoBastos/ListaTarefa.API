@@ -10,8 +10,8 @@ namespace ListaTarefa.API.Models
         [Required(ErrorMessage = "A descrição é obrigatória.")]
         public string Descricao { get; set; } = string.Empty;
         [Required(ErrorMessage = "O status é obrigatório.")]
-        public bool Status { get; set; }
-        public DateTime DataCriacao { get; set; } = DateTime.Now;
+        public bool Concluido { get; set; }
+        public DateTime Dt_Criacao { get; set; } 
 
     }
 }

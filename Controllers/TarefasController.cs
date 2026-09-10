@@ -14,7 +14,7 @@ namespace ListaTarefa.API.Controllers
         private readonly string? _connectionString;
         public TarefasController(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("EstoqueConnection");
+            _connectionString = configuration.GetConnectionString("ListaConnection");
         }
 
         [HttpGet]
@@ -34,8 +34,8 @@ namespace ListaTarefa.API.Controllers
                             Id = (int)reader["Id"],
                             Titulo = reader["Titulo"].ToString(),
                             Descricao = reader["Descricao"].ToString(),
-                            Status = (bool)reader["Status"],
-                            DataCriacao = (DateTime)reader["DataCriacao"]
+                            Concluido = (bool)reader["Concluido"],
+                            Dt_Criacao = (DateTime)reader["Dt_Criacao"]
                         });
                     }
                 }
@@ -59,8 +59,8 @@ namespace ListaTarefa.API.Controllers
                         Id = (int)reader["Id"],
                         Titulo = reader["Titulo"].ToString(),
                         Descricao = reader["Descricao"].ToString(),
-                        Status = (bool)reader["Status"],
-                        DataCriacao = (DateTime)reader["DataCriacao"]
+                        Concluido = (bool)reader["Concluido"],
+                        Dt_Criacao = (DateTime)reader["Dt_Criacao"]
 
                     };
                     return Ok(tarefa);
@@ -77,18 +77,17 @@ namespace ListaTarefa.API.Controllers
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
             var command = new SqlCommand(@"
-                INSERT INTO Tarefas (Titulo, Descricao, Status, DataCriacao)
+                INSERT INTO Tarefa (Titulo, Descricao)
                 VALUES
-                (@Titulo, @Descricao, @Status, @DataCriacao)", connection);
+                (@Titulo, @Descricao)", connection);
 
             command.Parameters.AddWithValue("@Titulo", tarefa.Titulo);
             command.Parameters.AddWithValue("@Descricao", tarefa.Descricao);
-            command.Parameters.AddWithValue("@Status", tarefa.Status);
-            command.Parameters.AddWithValue("@DataCriacao", tarefa.DataCriacao);
+            
 
             command.ExecuteNonQuery();
 
-            return CreatedAtAction(nameof(BuscarPorId), new { id = tarefa.Id }, tarefa);
+            return StatusCode(201, tarefa);
         }
 
         [HttpPatch("{id}")]
@@ -107,16 +106,13 @@ namespace ListaTarefa.API.Controllers
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
-            var command = new SqlCommand("DELETE * FROM Tarefas WHERE Id = @Id", connection);
+            var command = new SqlCommand(@"DELETE  FROM Tarefa WHERE Id = @Id", connection);
 
             command.Parameters.AddWithValue("@Id", id);
 
-            int linhasAfetadas = command.ExecuteNonQuery();
+            command.ExecuteNonQuery();
 
-            if (linhasAfetadas == 0)
-            {
-                return NotFound();
-            }
+            
             
             return NoContent();
         }
