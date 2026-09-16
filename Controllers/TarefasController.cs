@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ListaTarefa.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System.Collections.Generic;
-using System;
-using ListaTarefa.API.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Data.SqlTypes;
 
 namespace ListaTarefa.API.Controllers;
 
@@ -19,6 +14,7 @@ public class TarefasController : ControllerBase
         _connectionString = configuration.GetConnectionString("ListaConnection");
     }
 
+    #region =====GET=====
     [HttpGet]
     public IActionResult ListarTodos()
     {
@@ -44,6 +40,7 @@ public class TarefasController : ControllerBase
         }
         return Ok(tarefa);
     }
+    #endregion
 
     [HttpGet("{id}")]
     public IActionResult BuscarPorId(int id)
@@ -68,7 +65,7 @@ public class TarefasController : ControllerBase
                 return Ok(tarefa);
             }
         }
-        // Se nenhum produto for encontrado, retorna NotFound
+        // Se nenhuma tarefa for encontrada, retorna NotFound
         return NotFound();
 
     }
